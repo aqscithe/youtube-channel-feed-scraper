@@ -1,6 +1,6 @@
 use youtube_channel_feed_scraper::{WEBHOOK_URL, RUN_FREQUENCY, CHANNEL_IDS};
 use chrono::{Utc, DateTime, Duration};
-use lambda_runtime::{Error};
+use lambda_runtime::{service_fn, LambdaEvent, Error};
 use reqwest::Client;
 use serde_json::{json, Value};
 use xmltojson::{to_json};
@@ -20,7 +20,13 @@ fn text_to_json(s: &str) -> Value {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Error>  {
+async fn main() -> Result<(), Error> {
+    let func = service_fn(func);
+    lambda_runtime::run(func).await?;
+    Ok(())
+}
+
+async fn func(_event: LambdaEvent<Value>) -> Result<Value, Error> {
     // init request client
     let client = Client::new();
 
@@ -78,6 +84,6 @@ async fn main() -> Result<(), Error>  {
         }
     }
 
-    Ok(())
+    Ok(json!({}))
 
 }
