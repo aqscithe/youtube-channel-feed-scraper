@@ -70,7 +70,7 @@ async fn func(_event: LambdaEvent<Value>) -> Result<Value, Error> {
             if time_now.signed_duration_since(pub_date) <= Duration::seconds(RUN_FREQUENCY as i64) {
                 // prep body for POST request
                 let post_body = json!({
-                    "username": "CryptoBot",
+                    "username": "YT Scraper",
                     "content": entries[idx]["link"]["@href"]
                 });
 
